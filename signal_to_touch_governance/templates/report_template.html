@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Signal-to-Touch Governance Engine</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #17201c;
+        --muted: #66746e;
+        --paper: #f7f8f5;
+        --panel: #ffffff;
+        --line: #d7ddd7;
+        --block: #b42318;
+        --block-soft: #fff1ed;
+        --accent: #006b5f;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        line-height: 1.5;
+      }
+      main { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 40px 0; }
+      .page-header { margin-bottom: 28px; }
+      .page-header h1 { margin: 0 0 10px; font-size: clamp(32px, 6vw, 56px); line-height: 1; letter-spacing: 0; }
+      .page-header p { max-width: 780px; color: var(--muted); }
+      .eyebrow { margin: 0 0 8px; color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: 0; text-transform: uppercase; }
+      .account-card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 24px;
+        box-shadow: 0 10px 30px rgba(23, 32, 28, 0.06);
+      }
+      .account-card.blocked { border-color: #f3b6ad; box-shadow: 0 0 0 4px var(--block-soft); }
+      .card-header { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; margin-bottom: 18px; }
+      h2 { margin: 0 0 4px; font-size: 30px; letter-spacing: 0; }
+      h3 { margin: 0 0 10px; font-size: 16px; letter-spacing: 0; }
+      .decision {
+        min-width: 190px;
+        text-align: center;
+        border: 1px solid var(--block);
+        color: var(--block);
+        background: var(--block-soft);
+        border-radius: 6px;
+        padding: 10px 12px;
+        font-weight: 800;
+      }
+      .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+      .badges span {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 6px 10px;
+        background: #fbfcfa;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 650;
+      }
+      .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+      article { border: 1px solid var(--line); border-radius: 8px; padding: 16px; min-width: 0; }
+      article p { margin: 0 0 10px; }
+      ul { margin: 0; padding-left: 18px; }
+      a { color: var(--accent); overflow-wrap: anywhere; }
+      pre {
+        margin: 0;
+        max-height: 360px;
+        overflow: auto;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        background: #f4f6f2;
+        border-radius: 6px;
+        padding: 12px;
+        font-size: 12px;
+      }
+      blockquote {
+        margin: 10px 0 0;
+        border-left: 4px solid var(--block);
+        padding-left: 12px;
+        color: #46312e;
+      }
+      @media (max-width: 760px) {
+        main { width: min(100% - 20px, 1180px); padding: 24px 0; }
+        .card-header { display: block; }
+        .decision { margin-top: 14px; width: 100%; }
+        .grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header class="page-header">
+        <p class="eyebrow">Dry-run decision layer</p>
+        <h1>Signal-to-Touch Governance Engine</h1>
+        <p>I did not build another AI email writer. I built the layer before the email: the part that decides whether a signal deserves outbound at all.</p>
+      </header>
+
+      {% for report in reports %}
+      {% set account = report.account %}
+      {% set signal = report.signal %}
+      {% set context = report.context %}
+      {% set action = report.action %}
+      {% set gong_call = report.gong.recent_call %}
+      <section class="account-card {% if action.decision == 'BLOCK_OUTBOUND' %}blocked{% endif %}">
+        <div class="card-header">
+          <div>
+            <p class="eyebrow">Account</p>
+            <h2>{{ account.account_name }}</h2>
+            <p>Public search company: <strong>{{ account.public_search_company }}</strong></p>
+          </div>
+          <div class="decision">{{ action.decision }}</div>
+        </div>
+
+        <div class="badges">
+          <span>Dry run</span>
+          <span>Human approval required</span>
+          <span>{{ signal.source }}</span>
+          <span>Context: {{ context.evaluation_source }}</span>
+        </div>
+
+        <div class="grid">
+          <article>
+            <h3>Signal Found</h3>
+            <p><strong>{{ signal.signal_title }}</strong></p>
+            <p>{{ signal.signal_summary }}</p>
+            <p>Type: <strong>{{ signal.signal_type }}</strong></p>
+            <p>Score: <strong>{{ signal.score }}/10</strong></p>
+            <p><a href="{{ signal.signal_url }}">{{ signal.signal_url }}</a></p>
+            <p>{{ signal.relevance_reason }}</p>
+            <p>{{ signal.risk_of_noise }}</p>
+          </article>
+
+          <article>
+            <h3>HubSpot State</h3>
+            <pre>{{ account | json_pretty }}</pre>
+          </article>
+
+          <article>
+            <h3>Gong Context Interpretation</h3>
+            <p>{{ context.context_summary }}</p>
+            <blockquote>{{ gong_call.transcript_excerpt }}</blockquote>
+            <ul>
+              {% for item in context.key_evidence %}
+              <li>{{ item }}</li>
+              {% endfor %}
+            </ul>
+            <pre>{{ context | json_pretty }}</pre>
+          </article>
+
+          <article>
+            <h3>Decision Trace</h3>
+            <p>{{ action.reasoning }}</p>
+            <p>Blocked actions: <strong>{{ action.blocked_actions | join(', ') }}</strong></p>
+            {% if action.hubspot_task_payload %}
+            <h3>HubSpot Task Payload</h3>
+            <pre>{{ action.hubspot_task_payload | json_pretty }}</pre>
+            {% endif %}
+            {% if action.lemlist_payload %}
+            <h3>lemlist Payload</h3>
+            <pre>{{ action.lemlist_payload | json_pretty }}</pre>
+            {% endif %}
+          </article>
+        </div>
+      </section>
+      {% endfor %}
+    </main>
+  </body>
+</html>

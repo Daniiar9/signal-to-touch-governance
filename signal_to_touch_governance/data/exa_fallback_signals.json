@@ -1,0 +1,28 @@
+{
+  "signals": [
+    {
+      "account_name": "RetailCo",
+      "public_search_company": "Tesco",
+      "signal_title": "Tesco continues SAP-led retail operations modernization",
+      "signal_url": "https://www.tesco.com/news/",
+      "signal_summary": "Public materials and market coverage indicate ongoing retail operations and enterprise systems modernization, including SAP-related transformation themes that can affect supplier coordination, store operations, and back-office workflows.",
+      "signal_type": "erp_migration",
+      "score": 8,
+      "relevance_reason": "ERP and retail operations modernization are relevant to Duvo because they can create supplier coordination, store execution, and reconciliation workflow pressure.",
+      "risk_of_noise": "The signal is directionally strong but may not prove an immediate buying window without CRM and conversation context.",
+      "source": "fixture_fallback_used"
+    },
+    {
+      "account_name": "FMCGCo",
+      "public_search_company": "Unilever",
+      "signal_title": "Unilever expands digital supply chain and store execution transformation programs",
+      "signal_url": "https://www.unilever.com/news/",
+      "signal_summary": "Public company materials point to ongoing digital transformation across supply chain, customer operations, and commercial execution. The signal suggests practical workflow pressure around supplier coordination, store execution reporting, and operational data handoffs.",
+      "signal_type": "other",
+      "score": 8,
+      "relevance_reason": "Supply chain and commercial execution transformation maps directly to Duvo's operations ICP and can justify a tightly scoped, human-reviewed outbound draft.",
+      "risk_of_noise": "The signal is broad enough that it should be grounded in supportive Gong context before any draft is prepared.",
+      "source": "fixture_fallback_used"
+    }
+  ]
+}

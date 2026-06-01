@@ -1,0 +1,53 @@
+{
+  "accounts": [
+    {
+      "account_name": "RetailCo",
+      "public_search_company": "Tesco",
+      "industry": "retail",
+      "owner": "Maria AE",
+      "lifecycle_stage": "open_opportunity",
+      "deal_stage": "discovery",
+      "deal_amount": 200000,
+      "active_deal": true,
+      "target_persona": "Supply Chain / Store Operations",
+      "missing_fields": [
+        "phone",
+        "buying committee coverage",
+        "procurement stakeholder"
+      ],
+      "contacts": [
+        {
+          "first_name": "Jordan",
+          "last_name": "Patel",
+          "title": "Director of Store Operations",
+          "email": "jordan.patel@example.com",
+          "role": "economic influencer"
+        }
+      ]
+    },
+    {
+      "account_name": "FMCGCo",
+      "public_search_company": "Unilever",
+      "industry": "FMCG",
+      "owner": "SDR queue",
+      "lifecycle_stage": "target_account",
+      "deal_stage": null,
+      "deal_amount": null,
+      "active_deal": false,
+      "target_persona": "Operations / Supply Chain / Commercial Excellence",
+      "missing_fields": [
+        "direct phone",
+        "current operations initiative owner"
+      ],
+      "contacts": [
+        {
+          "first_name": "Alex",
+          "last_name": "Morgan",
+          "title": "Supply Chain Transformation Lead",
+          "email": "alex.morgan@example.com",
+          "role": "target persona"
+        }
+      ]
+    }
+  ]
+}

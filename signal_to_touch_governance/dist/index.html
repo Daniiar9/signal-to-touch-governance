@@ -1,0 +1,1290 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Signal-to-Touch Governance Engine</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #17201c;
+        --muted: #66746e;
+        --paper: #f7f8f5;
+        --panel: #ffffff;
+        --line: #d7ddd7;
+        --block: #b42318;
+        --block-soft: #fff1ed;
+        --accent: #006b5f;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        line-height: 1.5;
+      }
+      main { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 40px 0; }
+      .page-header { margin-bottom: 28px; }
+      .page-header h1 { margin: 0 0 10px; font-size: clamp(32px, 6vw, 56px); line-height: 1; letter-spacing: 0; }
+      .page-header p { max-width: 780px; color: var(--muted); }
+      .eyebrow { margin: 0 0 8px; color: var(--accent); font-size: 12px; font-weight: 700; letter-spacing: 0; text-transform: uppercase; }
+      .account-card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 24px;
+        box-shadow: 0 10px 30px rgba(23, 32, 28, 0.06);
+      }
+      .account-card.blocked { border-color: #f3b6ad; box-shadow: 0 0 0 4px var(--block-soft); }
+      .card-header { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; margin-bottom: 18px; }
+      h2 { margin: 0 0 4px; font-size: 30px; letter-spacing: 0; }
+      h3 { margin: 0 0 10px; font-size: 16px; letter-spacing: 0; }
+      .decision {
+        min-width: 190px;
+        text-align: center;
+        border: 1px solid var(--block);
+        color: var(--block);
+        background: var(--block-soft);
+        border-radius: 6px;
+        padding: 10px 12px;
+        font-weight: 800;
+      }
+      .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+      .badges span {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 6px 10px;
+        background: #fbfcfa;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 650;
+      }
+      .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+      article { border: 1px solid var(--line); border-radius: 8px; padding: 16px; min-width: 0; }
+      article p { margin: 0 0 10px; }
+      ul { margin: 0; padding-left: 18px; }
+      a { color: var(--accent); overflow-wrap: anywhere; }
+      pre {
+        margin: 0;
+        max-height: 360px;
+        overflow: auto;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        background: #f4f6f2;
+        border-radius: 6px;
+        padding: 12px;
+        font-size: 12px;
+      }
+      blockquote {
+        margin: 10px 0 0;
+        border-left: 4px solid var(--block);
+        padding-left: 12px;
+        color: #46312e;
+      }
+      @media (max-width: 760px) {
+        main { width: min(100% - 20px, 1180px); padding: 24px 0; }
+        .card-header { display: block; }
+        .decision { margin-top: 14px; width: 100%; }
+        .grid { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header class="page-header">
+        <p class="eyebrow">Dry-run decision layer</p>
+        <h1>Signal-to-Touch Governance Engine</h1>
+        <p>I did not build another AI email writer. I built the layer before the email: the part that decides whether a signal deserves outbound at all.</p>
+      </header>
+
+      
+      
+      
+      
+      
+      
+      <section class="account-card blocked">
+        <div class="card-header">
+          <div>
+            <p class="eyebrow">Account</p>
+            <h2>RetailCo</h2>
+            <p>Public search company: <strong>Tesco</strong></p>
+          </div>
+          <div class="decision">BLOCK_OUTBOUND</div>
+        </div>
+
+        <div class="badges">
+          <span>Dry run</span>
+          <span>Human approval required</span>
+          <span>fixture_fallback_used</span>
+          <span>Context: openai_live</span>
+        </div>
+
+        <div class="grid">
+          <article>
+            <h3>Signal Found</h3>
+            <p><strong>Tesco continues SAP-led retail operations modernization</strong></p>
+            <p>Public materials and market coverage indicate ongoing retail operations and enterprise systems modernization, including SAP-related transformation themes that can affect supplier coordination, store operations, and back-office workflows.</p>
+            <p>Type: <strong>erp_migration</strong></p>
+            <p>Score: <strong>8/10</strong></p>
+            <p><a href="https://www.tesco.com/news/">https://www.tesco.com/news/</a></p>
+            <p>ERP and retail operations modernization are relevant to Duvo because they can create supplier coordination, store execution, and reconciliation workflow pressure.</p>
+            <p>The signal is directionally strong but may not prove an immediate buying window without CRM and conversation context.</p>
+          </article>
+
+          <article>
+            <h3>HubSpot State</h3>
+            <pre>{
+  &#34;account_name&#34;: &#34;RetailCo&#34;,
+  &#34;public_search_company&#34;: &#34;Tesco&#34;,
+  &#34;industry&#34;: &#34;retail&#34;,
+  &#34;owner&#34;: &#34;Maria AE&#34;,
+  &#34;lifecycle_stage&#34;: &#34;open_opportunity&#34;,
+  &#34;deal_stage&#34;: &#34;discovery&#34;,
+  &#34;deal_amount&#34;: 200000,
+  &#34;active_deal&#34;: true,
+  &#34;target_persona&#34;: &#34;Supply Chain / Store Operations&#34;,
+  &#34;missing_fields&#34;: [
+    &#34;phone&#34;,
+    &#34;buying committee coverage&#34;,
+    &#34;procurement stakeholder&#34;
+  ],
+  &#34;contacts&#34;: [
+    {
+      &#34;first_name&#34;: &#34;Jordan&#34;,
+      &#34;last_name&#34;: &#34;Patel&#34;,
+      &#34;title&#34;: &#34;Director of Store Operations&#34;,
+      &#34;email&#34;: &#34;jordan.patel@example.com&#34;,
+      &#34;role&#34;: &#34;economic influencer&#34;
+    }
+  ]
+}</pre>
+          </article>
+
+          <article>
+            <h3>Gong Context Interpretation</h3>
+            <p>RetailCo is in discovery stage with an active deal. The account is undergoing an SAP S/4HANA migration expected to complete in Q4, during which all external vendor conversations are frozen. The account owner Maria AE should maintain relationship warmth and follow up after the migration checkpoint. Public signals confirm ongoing SAP-led retail operations modernization relevant to Duvo&#39;s solution.</p>
+            <blockquote>We are freezing external vendor conversations until the SAP S/4HANA migration is complete in Q4. Please do not have anyone else reach out before Maria follows up with us later in the year.</blockquote>
+            <ul>
+              
+              <li>B</li>
+              
+              <li>u</li>
+              
+              <li>y</li>
+              
+              <li>e</li>
+              
+              <li>r</li>
+              
+              <li> </li>
+              
+              <li>s</li>
+              
+              <li>t</li>
+              
+              <li>a</li>
+              
+              <li>t</li>
+              
+              <li>e</li>
+              
+              <li>d</li>
+              
+              <li> </li>
+              
+              <li>a</li>
+              
+              <li>l</li>
+              
+              <li>l</li>
+              
+              <li> </li>
+              
+              <li>e</li>
+              
+              <li>x</li>
+              
+              <li>t</li>
+              
+              <li>e</li>
+              
+              <li>r</li>
+              
+              <li>n</li>
+              
+              <li>a</li>
+              
+              <li>l</li>
+              
+              <li> </li>
+              
+              <li>v</li>
+              
+              <li>e</li>
+              
+              <li>n</li>
+              
+              <li>d</li>
+              
+              <li>o</li>
+              
+              <li>r</li>
+              
+              <li> </li>
+              
+              <li>c</li>
+              
+              <li>o</li>
+              
+              <li>n</li>
+              
+              <li>v</li>
+              
+              <li>e</li>
+              
+              <li>r</li>
+              
+              <li>s</li>
+              
+              <li>a</li>
+              
+              <li>t</li>
+              
+              <li>i</li>
+              
+              <li>o</li>
+              
+              <li>n</li>
+              
+              <li>s</li>
+              
+              <li> </li>
+              
+              <li>a</li>
+              
+              <li>r</li>
+              
+              <li>e</li>
+              
+              <li> </li>
+              
+              <li>f</li>
+              
+              <li>r</li>
+              
+              <li>o</li>
+              
+              <li>z</li>
+              
+              <li>e</li>
+              
+              <li>n</li>
+              
+              <li> </li>
+              
+              <li>u</li>
+              
+              <li>n</li>
+              
+              <li>t</li>
+              
+              <li>i</li>
+              
+              <li>l</li>
+              
+              <li> </li>
+              
+              <li>S</li>
+              
+              <li>A</li>
+              
+              <li>P</li>
+              
+              <li> </li>
+              
+              <li>S</li>
+              
+              <li>/</li>
+              
+              <li>4</li>
+              
+              <li>H</li>
+              
+              <li>A</li>
+              
+              <li>N</li>
+              
+              <li>A</li>
+              
+              <li> </li>
+              
+              <li>m</li>
+              
+              <li>i</li>
+              
+              <li>g</li>
+              
+              <li>r</li>
+              
+              <li>a</li>
+              
+              <li>t</li>
+              
+              <li>i</li>
+              
+              <li>o</li>
+              
+              <li>n</li>
+              
+              <li> </li>
+              
+              <li>i</li>
+              
+              <li>s</li>
+              
+              <li> </li>
+              
+              <li>c</li>
+              
+              <li>o</li>
+              
+              <li>m</li>
+              
+              <li>p</li>
+              
+              <li>l</li>
+              
+              <li>e</li>
+              
+              <li>t</li>
+              
+              <li>e</li>
+              
+              <li> </li>
+              
+              <li>i</li>
+              
+              <li>n</li>
+              
+              <li> </li>
+              
+              <li>Q</li>
+              
+              <li>4</li>
+              
+              <li>;</li>
+              
+              <li> </li>
+              
+              <li>t</li>
+              
+              <li>r</li>
+              
+              <li>a</li>
+              
+              <li>n</li>
+              
+              <li>s</li>
+              
+              <li>c</li>
+              
+              <li>r</li>
+              
+              <li>i</li>
+              
+              <li>p</li>
+              
+              <li>t</li>
+              
+              <li> </li>
+              
+              <li>e</li>
+              
+              <li>x</li>
+              
+              <li>c</li>
+              
+              <li>e</li>
+              
+              <li>r</li>
+              
+              <li>p</li>
+              
+              <li>t</li>
+              
+              <li>:</li>
+              
+              <li> </li>
+              
+              <li>&#39;</li>
+              
+              <li>W</li>
+              
+              <li>e</li>
+              
+              <li> </li>
+              
+              <li>a</li>
+              
+              <li>r</li>
+              
+              <li>e</li>
+              
+              <li> </li>
+              
+              <li>f</li>
+              
+              <li>r</li>
+              
+              <li>e</li>
+              
+              <li>e</li>
+              
+              <li>z</li>
+              
+              <li>i</li>
+              
+              <li>n</li>
+              
+              <li>g</li>
+              
+              <li> </li>
+              
+              <li>e</li>
+              
+              <li>x</li>
+              
+              <li>t</li>
+              
+              <li>e</li>
+              
+              <li>r</li>
+              
+              <li>n</li>
+              
+              <li>a</li>
+              
+              <li>l</li>
+              
+              <li> </li>
+              
+              <li>v</li>
+              
+              <li>e</li>
+              
+              <li>n</li>
+              
+              <li>d</li>
+              
+              <li>o</li>
+              
+              <li>r</li>
+              
+              <li> </li>
+              
+              <li>c</li>
+              
+              <li>o</li>
+              
+              <li>n</li>
+              
+              <li>v</li>
+              
+              <li>e</li>
+              
+              <li>r</li>
+              
+              <li>s</li>
+              
+              <li>a</li>
+              
+              <li>t</li>
+              
+              <li>i</li>
+              
+              <li>o</li>
+              
+              <li>n</li>
+              
+              <li>s</li>
+              
+              <li> </li>
+              
+              <li>u</li>
+              
+              <li>n</li>
+              
+              <li>t</li>
+              
+              <li>i</li>
+              
+              <li>l</li>
+              
+              <li> </li>
+              
+              <li>t</li>
+              
+              <li>h</li>
+              
+              <li>e</li>
+              
+              <li> </li>
+              
+              <li>S</li>
+              
+              <li>A</li>
+              
+              <li>P</li>
+              
+              <li> </li>
+              
+              <li>S</li>
+              
+              <li>/</li>
+              
+              <li>4</li>
+              
+              <li>H</li>
+              
+              <li>A</li>
+              
+              <li>N</li>
+              
+              <li>A</li>
+              
+              <li> </li>
+              
+              <li>m</li>
+              
+              <li>i</li>
+              
+              <li>g</li>
+              
+              <li>r</li>
+              
+              <li>a</li>
+              
+              <li>t</li>
+              
+              <li>i</li>
+              
+              <li>o</li>
+              
+              <li>n</li>
+              
+              <li> </li>
+              
+              <li>i</li>
+              
+              <li>s</li>
+              
+              <li> </li>
+              
+              <li>c</li>
+              
+              <li>o</li>
+              
+              <li>m</li>
+              
+              <li>p</li>
+              
+              <li>l</li>
+              
+              <li>e</li>
+              
+              <li>t</li>
+              
+              <li>e</li>
+              
+              <li> </li>
+              
+              <li>i</li>
+              
+              <li>n</li>
+              
+              <li> </li>
+              
+              <li>Q</li>
+              
+              <li>4</li>
+              
+              <li>.</li>
+              
+              <li> </li>
+              
+              <li>P</li>
+              
+              <li>l</li>
+              
+              <li>e</li>
+              
+              <li>a</li>
+              
+              <li>s</li>
+              
+              <li>e</li>
+              
+              <li> </li>
+              
+              <li>d</li>
+              
+              <li>o</li>
+              
+              <li> </li>
+              
+              <li>n</li>
+              
+              <li>o</li>
+              
+              <li>t</li>
+              
+              <li> </li>
+              
+              <li>h</li>
+              
+              <li>a</li>
+              
+              <li>v</li>
+              
+              <li>e</li>
+              
+              <li> </li>
+              
+              <li>a</li>
+              
+              <li>n</li>
+              
+              <li>y</li>
+              
+              <li>o</li>
+              
+              <li>n</li>
+              
+              <li>e</li>
+              
+              <li> </li>
+              
+              <li>e</li>
+              
+              <li>l</li>
+              
+              <li>s</li>
+              
+              <li>e</li>
+              
+              <li> </li>
+              
+              <li>r</li>
+              
+              <li>e</li>
+              
+              <li>a</li>
+              
+              <li>c</li>
+              
+              <li>h</li>
+              
+              <li> </li>
+              
+              <li>o</li>
+              
+              <li>u</li>
+              
+              <li>t</li>
+              
+              <li> </li>
+              
+              <li>b</li>
+              
+              <li>e</li>
+              
+              <li>f</li>
+              
+              <li>o</li>
+              
+              <li>r</li>
+              
+              <li>e</li>
+              
+              <li> </li>
+              
+              <li>M</li>
+              
+              <li>a</li>
+              
+              <li>r</li>
+              
+              <li>i</li>
+              
+              <li>a</li>
+              
+              <li> </li>
+              
+              <li>f</li>
+              
+              <li>o</li>
+              
+              <li>l</li>
+              
+              <li>l</li>
+              
+              <li>o</li>
+              
+              <li>w</li>
+              
+              <li>s</li>
+              
+              <li> </li>
+              
+              <li>u</li>
+              
+              <li>p</li>
+              
+              <li> </li>
+              
+              <li>w</li>
+              
+              <li>i</li>
+              
+              <li>t</li>
+              
+              <li>h</li>
+              
+              <li> </li>
+              
+              <li>u</li>
+              
+              <li>s</li>
+              
+              <li> </li>
+              
+              <li>l</li>
+              
+              <li>a</li>
+              
+              <li>t</li>
+              
+              <li>e</li>
+              
+              <li>r</li>
+              
+              <li> </li>
+              
+              <li>i</li>
+              
+              <li>n</li>
+              
+              <li> </li>
+              
+              <li>t</li>
+              
+              <li>h</li>
+              
+              <li>e</li>
+              
+              <li> </li>
+              
+              <li>y</li>
+              
+              <li>e</li>
+              
+              <li>a</li>
+              
+              <li>r</li>
+              
+              <li>.</li>
+              
+              <li>&#39;</li>
+              
+            </ul>
+            <pre>{
+  &#34;has_active_deal_conflict&#34;: false,
+  &#34;has_vendor_freeze&#34;: true,
+  &#34;has_open_objection&#34;: true,
+  &#34;supports_outreach&#34;: false,
+  &#34;owner_should_handle&#34;: true,
+  &#34;key_evidence&#34;: [
+    &#34;B&#34;,
+    &#34;u&#34;,
+    &#34;y&#34;,
+    &#34;e&#34;,
+    &#34;r&#34;,
+    &#34; &#34;,
+    &#34;s&#34;,
+    &#34;t&#34;,
+    &#34;a&#34;,
+    &#34;t&#34;,
+    &#34;e&#34;,
+    &#34;d&#34;,
+    &#34; &#34;,
+    &#34;a&#34;,
+    &#34;l&#34;,
+    &#34;l&#34;,
+    &#34; &#34;,
+    &#34;e&#34;,
+    &#34;x&#34;,
+    &#34;t&#34;,
+    &#34;e&#34;,
+    &#34;r&#34;,
+    &#34;n&#34;,
+    &#34;a&#34;,
+    &#34;l&#34;,
+    &#34; &#34;,
+    &#34;v&#34;,
+    &#34;e&#34;,
+    &#34;n&#34;,
+    &#34;d&#34;,
+    &#34;o&#34;,
+    &#34;r&#34;,
+    &#34; &#34;,
+    &#34;c&#34;,
+    &#34;o&#34;,
+    &#34;n&#34;,
+    &#34;v&#34;,
+    &#34;e&#34;,
+    &#34;r&#34;,
+    &#34;s&#34;,
+    &#34;a&#34;,
+    &#34;t&#34;,
+    &#34;i&#34;,
+    &#34;o&#34;,
+    &#34;n&#34;,
+    &#34;s&#34;,
+    &#34; &#34;,
+    &#34;a&#34;,
+    &#34;r&#34;,
+    &#34;e&#34;,
+    &#34; &#34;,
+    &#34;f&#34;,
+    &#34;r&#34;,
+    &#34;o&#34;,
+    &#34;z&#34;,
+    &#34;e&#34;,
+    &#34;n&#34;,
+    &#34; &#34;,
+    &#34;u&#34;,
+    &#34;n&#34;,
+    &#34;t&#34;,
+    &#34;i&#34;,
+    &#34;l&#34;,
+    &#34; &#34;,
+    &#34;S&#34;,
+    &#34;A&#34;,
+    &#34;P&#34;,
+    &#34; &#34;,
+    &#34;S&#34;,
+    &#34;/&#34;,
+    &#34;4&#34;,
+    &#34;H&#34;,
+    &#34;A&#34;,
+    &#34;N&#34;,
+    &#34;A&#34;,
+    &#34; &#34;,
+    &#34;m&#34;,
+    &#34;i&#34;,
+    &#34;g&#34;,
+    &#34;r&#34;,
+    &#34;a&#34;,
+    &#34;t&#34;,
+    &#34;i&#34;,
+    &#34;o&#34;,
+    &#34;n&#34;,
+    &#34; &#34;,
+    &#34;i&#34;,
+    &#34;s&#34;,
+    &#34; &#34;,
+    &#34;c&#34;,
+    &#34;o&#34;,
+    &#34;m&#34;,
+    &#34;p&#34;,
+    &#34;l&#34;,
+    &#34;e&#34;,
+    &#34;t&#34;,
+    &#34;e&#34;,
+    &#34; &#34;,
+    &#34;i&#34;,
+    &#34;n&#34;,
+    &#34; &#34;,
+    &#34;Q&#34;,
+    &#34;4&#34;,
+    &#34;;&#34;,
+    &#34; &#34;,
+    &#34;t&#34;,
+    &#34;r&#34;,
+    &#34;a&#34;,
+    &#34;n&#34;,
+    &#34;s&#34;,
+    &#34;c&#34;,
+    &#34;r&#34;,
+    &#34;i&#34;,
+    &#34;p&#34;,
+    &#34;t&#34;,
+    &#34; &#34;,
+    &#34;e&#34;,
+    &#34;x&#34;,
+    &#34;c&#34;,
+    &#34;e&#34;,
+    &#34;r&#34;,
+    &#34;p&#34;,
+    &#34;t&#34;,
+    &#34;:&#34;,
+    &#34; &#34;,
+    &#34;&#39;&#34;,
+    &#34;W&#34;,
+    &#34;e&#34;,
+    &#34; &#34;,
+    &#34;a&#34;,
+    &#34;r&#34;,
+    &#34;e&#34;,
+    &#34; &#34;,
+    &#34;f&#34;,
+    &#34;r&#34;,
+    &#34;e&#34;,
+    &#34;e&#34;,
+    &#34;z&#34;,
+    &#34;i&#34;,
+    &#34;n&#34;,
+    &#34;g&#34;,
+    &#34; &#34;,
+    &#34;e&#34;,
+    &#34;x&#34;,
+    &#34;t&#34;,
+    &#34;e&#34;,
+    &#34;r&#34;,
+    &#34;n&#34;,
+    &#34;a&#34;,
+    &#34;l&#34;,
+    &#34; &#34;,
+    &#34;v&#34;,
+    &#34;e&#34;,
+    &#34;n&#34;,
+    &#34;d&#34;,
+    &#34;o&#34;,
+    &#34;r&#34;,
+    &#34; &#34;,
+    &#34;c&#34;,
+    &#34;o&#34;,
+    &#34;n&#34;,
+    &#34;v&#34;,
+    &#34;e&#34;,
+    &#34;r&#34;,
+    &#34;s&#34;,
+    &#34;a&#34;,
+    &#34;t&#34;,
+    &#34;i&#34;,
+    &#34;o&#34;,
+    &#34;n&#34;,
+    &#34;s&#34;,
+    &#34; &#34;,
+    &#34;u&#34;,
+    &#34;n&#34;,
+    &#34;t&#34;,
+    &#34;i&#34;,
+    &#34;l&#34;,
+    &#34; &#34;,
+    &#34;t&#34;,
+    &#34;h&#34;,
+    &#34;e&#34;,
+    &#34; &#34;,
+    &#34;S&#34;,
+    &#34;A&#34;,
+    &#34;P&#34;,
+    &#34; &#34;,
+    &#34;S&#34;,
+    &#34;/&#34;,
+    &#34;4&#34;,
+    &#34;H&#34;,
+    &#34;A&#34;,
+    &#34;N&#34;,
+    &#34;A&#34;,
+    &#34; &#34;,
+    &#34;m&#34;,
+    &#34;i&#34;,
+    &#34;g&#34;,
+    &#34;r&#34;,
+    &#34;a&#34;,
+    &#34;t&#34;,
+    &#34;i&#34;,
+    &#34;o&#34;,
+    &#34;n&#34;,
+    &#34; &#34;,
+    &#34;i&#34;,
+    &#34;s&#34;,
+    &#34; &#34;,
+    &#34;c&#34;,
+    &#34;o&#34;,
+    &#34;m&#34;,
+    &#34;p&#34;,
+    &#34;l&#34;,
+    &#34;e&#34;,
+    &#34;t&#34;,
+    &#34;e&#34;,
+    &#34; &#34;,
+    &#34;i&#34;,
+    &#34;n&#34;,
+    &#34; &#34;,
+    &#34;Q&#34;,
+    &#34;4&#34;,
+    &#34;.&#34;,
+    &#34; &#34;,
+    &#34;P&#34;,
+    &#34;l&#34;,
+    &#34;e&#34;,
+    &#34;a&#34;,
+    &#34;s&#34;,
+    &#34;e&#34;,
+    &#34; &#34;,
+    &#34;d&#34;,
+    &#34;o&#34;,
+    &#34; &#34;,
+    &#34;n&#34;,
+    &#34;o&#34;,
+    &#34;t&#34;,
+    &#34; &#34;,
+    &#34;h&#34;,
+    &#34;a&#34;,
+    &#34;v&#34;,
+    &#34;e&#34;,
+    &#34; &#34;,
+    &#34;a&#34;,
+    &#34;n&#34;,
+    &#34;y&#34;,
+    &#34;o&#34;,
+    &#34;n&#34;,
+    &#34;e&#34;,
+    &#34; &#34;,
+    &#34;e&#34;,
+    &#34;l&#34;,
+    &#34;s&#34;,
+    &#34;e&#34;,
+    &#34; &#34;,
+    &#34;r&#34;,
+    &#34;e&#34;,
+    &#34;a&#34;,
+    &#34;c&#34;,
+    &#34;h&#34;,
+    &#34; &#34;,
+    &#34;o&#34;,
+    &#34;u&#34;,
+    &#34;t&#34;,
+    &#34; &#34;,
+    &#34;b&#34;,
+    &#34;e&#34;,
+    &#34;f&#34;,
+    &#34;o&#34;,
+    &#34;r&#34;,
+    &#34;e&#34;,
+    &#34; &#34;,
+    &#34;M&#34;,
+    &#34;a&#34;,
+    &#34;r&#34;,
+    &#34;i&#34;,
+    &#34;a&#34;,
+    &#34; &#34;,
+    &#34;f&#34;,
+    &#34;o&#34;,
+    &#34;l&#34;,
+    &#34;l&#34;,
+    &#34;o&#34;,
+    &#34;w&#34;,
+    &#34;s&#34;,
+    &#34; &#34;,
+    &#34;u&#34;,
+    &#34;p&#34;,
+    &#34; &#34;,
+    &#34;w&#34;,
+    &#34;i&#34;,
+    &#34;t&#34;,
+    &#34;h&#34;,
+    &#34; &#34;,
+    &#34;u&#34;,
+    &#34;s&#34;,
+    &#34; &#34;,
+    &#34;l&#34;,
+    &#34;a&#34;,
+    &#34;t&#34;,
+    &#34;e&#34;,
+    &#34;r&#34;,
+    &#34; &#34;,
+    &#34;i&#34;,
+    &#34;n&#34;,
+    &#34; &#34;,
+    &#34;t&#34;,
+    &#34;h&#34;,
+    &#34;e&#34;,
+    &#34; &#34;,
+    &#34;y&#34;,
+    &#34;e&#34;,
+    &#34;a&#34;,
+    &#34;r&#34;,
+    &#34;.&#34;,
+    &#34;&#39;&#34;
+  ],
+  &#34;context_summary&#34;: &#34;RetailCo is in discovery stage with an active deal. The account is undergoing an SAP S/4HANA migration expected to complete in Q4, during which all external vendor conversations are frozen. The account owner Maria AE should maintain relationship warmth and follow up after the migration checkpoint. Public signals confirm ongoing SAP-led retail operations modernization relevant to Duvo&#39;s solution.&#34;,
+  &#34;risk_level&#34;: &#34;medium&#34;,
+  &#34;evaluation_source&#34;: &#34;openai_live&#34;
+}</pre>
+          </article>
+
+          <article>
+            <h3>Decision Trace</h3>
+            <p>Strong external signal, but Gong and HubSpot context indicate an active vendor freeze, open objection, or owner-led deal motion. Do not enroll this account in lemlist.</p>
+            <p>Blocked actions: <strong>lemlist_enrollment, auto_send</strong></p>
+            
+            <h3>HubSpot Task Payload</h3>
+            <pre>{
+  &#34;object_type&#34;: &#34;task&#34;,
+  &#34;account_name&#34;: &#34;RetailCo&#34;,
+  &#34;owner&#34;: &#34;Maria AE&#34;,
+  &#34;priority&#34;: &#34;high&#34;,
+  &#34;subject&#34;: &#34;Review blocked outbound signal before any follow-up&#34;,
+  &#34;body&#34;: &#34;External signal found: Tesco continues SAP-led retail operations modernization. Outbound blocked because Gong context says: Do not outbound; account owner should follow up later.&#34;,
+  &#34;due_date&#34;: &#34;2026-10-15&#34;,
+  &#34;metadata&#34;: {
+    &#34;decision&#34;: &#34;BLOCK_OUTBOUND&#34;,
+    &#34;signal_url&#34;: &#34;https://www.tesco.com/news/&#34;,
+    &#34;gong_call_date&#34;: &#34;2026-05-23&#34;,
+    &#34;objection_type&#34;: &#34;vendor_freeze&#34;
+  }
+}</pre>
+            
+            
+          </article>
+        </div>
+      </section>
+      
+      
+      
+      
+      
+      
+      <section class="account-card ">
+        <div class="card-header">
+          <div>
+            <p class="eyebrow">Account</p>
+            <h2>FMCGCo</h2>
+            <p>Public search company: <strong>Unilever</strong></p>
+          </div>
+          <div class="decision">PREPARE_LEMLIST_DRAFT</div>
+        </div>
+
+        <div class="badges">
+          <span>Dry run</span>
+          <span>Human approval required</span>
+          <span>fixture_fallback_used</span>
+          <span>Context: openai_live</span>
+        </div>
+
+        <div class="grid">
+          <article>
+            <h3>Signal Found</h3>
+            <p><strong>Unilever expands digital supply chain and store execution transformation programs</strong></p>
+            <p>Public company materials point to ongoing digital transformation across supply chain, customer operations, and commercial execution. The signal suggests practical workflow pressure around supplier coordination, store execution reporting, and operational data handoffs.</p>
+            <p>Type: <strong>other</strong></p>
+            <p>Score: <strong>8/10</strong></p>
+            <p><a href="https://www.unilever.com/news/">https://www.unilever.com/news/</a></p>
+            <p>Supply chain and commercial execution transformation maps directly to Duvo&#39;s operations ICP and can justify a tightly scoped, human-reviewed outbound draft.</p>
+            <p>The signal is broad enough that it should be grounded in supportive Gong context before any draft is prepared.</p>
+          </article>
+
+          <article>
+            <h3>HubSpot State</h3>
+            <pre>{
+  &#34;account_name&#34;: &#34;FMCGCo&#34;,
+  &#34;public_search_company&#34;: &#34;Unilever&#34;,
+  &#34;industry&#34;: &#34;FMCG&#34;,
+  &#34;owner&#34;: &#34;SDR queue&#34;,
+  &#34;lifecycle_stage&#34;: &#34;target_account&#34;,
+  &#34;deal_stage&#34;: null,
+  &#34;deal_amount&#34;: null,
+  &#34;active_deal&#34;: false,
+  &#34;target_persona&#34;: &#34;Operations / Supply Chain / Commercial Excellence&#34;,
+  &#34;missing_fields&#34;: [
+    &#34;direct phone&#34;,
+    &#34;current operations initiative owner&#34;
+  ],
+  &#34;contacts&#34;: [
+    {
+      &#34;first_name&#34;: &#34;Alex&#34;,
+      &#34;last_name&#34;: &#34;Morgan&#34;,
+      &#34;title&#34;: &#34;Supply Chain Transformation Lead&#34;,
+      &#34;email&#34;: &#34;alex.morgan@example.com&#34;,
+      &#34;role&#34;: &#34;target persona&#34;
+    }
+  ]
+}</pre>
+          </article>
+
+          <article>
+            <h3>Gong Context Interpretation</h3>
+            <p>FMCGCo (Unilever) is a target account in the FMCG industry with no active deals. The recent call with the Supply Chain Transformation Lead revealed operational friction points around store execution reporting and supplier coordination. The buyer is receptive to concise, practical follow-up messages. Public signals confirm ongoing digital transformation initiatives relevant to the target persona. There are no objections or conflicts, and outreach is supported.</p>
+            <blockquote>The useful follow-up would be something practical around store execution reporting and supplier coordination. We are not in an active evaluation yet, but a concise note with the right operational angle is fine.</blockquote>
+            <ul>
+              
+              <li>No active deal in progress (active_deal: false).</li>
+              
+              <li>Recent call summary indicates buyer is open to relevant, concise follow-up tied to operations workflows.</li>
+              
+              <li>No objections recorded in recent call (objection_type: none).</li>
+              
+              <li>Signal indicates ongoing digital transformation relevant to supply chain and store execution, aligning with target persona.</li>
+              
+              <li>Sentiment in recent call is supportive.</li>
+              
+            </ul>
+            <pre>{
+  &#34;has_active_deal_conflict&#34;: false,
+  &#34;has_vendor_freeze&#34;: false,
+  &#34;has_open_objection&#34;: false,
+  &#34;supports_outreach&#34;: true,
+  &#34;owner_should_handle&#34;: false,
+  &#34;key_evidence&#34;: [
+    &#34;No active deal in progress (active_deal: false).&#34;,
+    &#34;Recent call summary indicates buyer is open to relevant, concise follow-up tied to operations workflows.&#34;,
+    &#34;No objections recorded in recent call (objection_type: none).&#34;,
+    &#34;Signal indicates ongoing digital transformation relevant to supply chain and store execution, aligning with target persona.&#34;,
+    &#34;Sentiment in recent call is supportive.&#34;
+  ],
+  &#34;context_summary&#34;: &#34;FMCGCo (Unilever) is a target account in the FMCG industry with no active deals. The recent call with the Supply Chain Transformation Lead revealed operational friction points around store execution reporting and supplier coordination. The buyer is receptive to concise, practical follow-up messages. Public signals confirm ongoing digital transformation initiatives relevant to the target persona. There are no objections or conflicts, and outreach is supported.&#34;,
+  &#34;risk_level&#34;: &#34;low&#34;,
+  &#34;evaluation_source&#34;: &#34;openai_live&#34;
+}</pre>
+          </article>
+
+          <article>
+            <h3>Decision Trace</h3>
+            <p>Strong signal and no detected account or conversation conflict.</p>
+            <p>Blocked actions: <strong>auto_send</strong></p>
+            
+            
+            <h3>lemlist Payload</h3>
+            <pre>{
+  &#34;campaign_id&#34;: &#34;mock_campaign_duvo_ops&#34;,
+  &#34;lead&#34;: {
+    &#34;email&#34;: &#34;alex.morgan@example.com&#34;,
+    &#34;firstName&#34;: &#34;Alex&#34;,
+    &#34;lastName&#34;: &#34;Morgan&#34;,
+    &#34;companyName&#34;: &#34;FMCGCo&#34;,
+    &#34;customVariables&#34;: {
+      &#34;signal&#34;: &#34;Unilever expands digital supply chain and store execution transformation programs&#34;,
+      &#34;why_now&#34;: &#34;Public company materials point to ongoing digital transformation across supply chain, customer operations, and commercial execution. The signal suggests practical workflow pressure around supplier coordination, store execution reporting, and operational data handoffs.&#34;,
+      &#34;duvo_angle&#34;: &#34;Reduce operational friction across supplier, store, and back-office workflows.&#34;
+    }
+  },
+  &#34;message&#34;: {
+    &#34;subject&#34;: &#34;Operational workflow question&#34;,
+    &#34;body&#34;: &#34;Hi Alex,\n\nSaw broader operations change around your team and thought this might be relevant. Duvo helps operations teams reduce manual coordination across supplier, store, and back-office workflows.\n\nWorth a short look if this is already on your team&#39;s radar?&#34;
+  },
+  &#34;dry_run&#34;: true,
+  &#34;human_approval_required&#34;: true
+}</pre>
+            
+          </article>
+        </div>
+      </section>
+      
+    </main>
+  </body>
+</html>

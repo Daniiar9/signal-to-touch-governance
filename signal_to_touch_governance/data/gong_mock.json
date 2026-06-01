@@ -1,0 +1,35 @@
+{
+  "accounts": [
+    {
+      "account_name": "RetailCo",
+      "recent_call": {
+        "date": "2026-05-23",
+        "participants": [
+          "Maria AE",
+          "Jordan Patel",
+          "RetailCo Transformation Office"
+        ],
+        "structured_summary": "RetailCo is in discovery with Duvo, but the buyer said all external vendor conversations are frozen until the SAP S/4HANA migration is complete in Q4. Maria should keep the relationship warm and follow up after the migration checkpoint.",
+        "transcript_excerpt": "We are freezing external vendor conversations until the SAP S/4HANA migration is complete in Q4. Please do not have anyone else reach out before Maria follows up with us later in the year.",
+        "objection_type": "vendor_freeze",
+        "sentiment": "pause",
+        "next_step": "Do not outbound; account owner should follow up later."
+      }
+    },
+    {
+      "account_name": "FMCGCo",
+      "recent_call": {
+        "date": "2026-05-28",
+        "participants": [
+          "SDR queue",
+          "Alex Morgan"
+        ],
+        "structured_summary": "FMCGCo described manual store execution reporting, supplier coordination handoffs, and invoice reconciliation follow-up as recurring operational friction. The buyer asked for concise, relevant follow-up if there is a practical example tied to operations workflows.",
+        "transcript_excerpt": "The useful follow-up would be something practical around store execution reporting and supplier coordination. We are not in an active evaluation yet, but a concise note with the right operational angle is fine.",
+        "objection_type": "none",
+        "sentiment": "supportive",
+        "next_step": "Relevant follow-up is acceptable; no active pause or owner conflict."
+      }
+    }
+  ]
+}
