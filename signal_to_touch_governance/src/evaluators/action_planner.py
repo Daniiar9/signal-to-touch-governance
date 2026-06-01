@@ -24,7 +24,7 @@ def plan_action(
                 "Strong external signal, but Gong and HubSpot context indicate an active vendor freeze, "
                 "open objection, or owner-led deal motion. Do not enroll this account in lemlist."
             ),
-            "blocked_actions": ["lemlist_enrollment", "auto_send"],
+            "blocked_actions": ["lemlist_enrollment", "auto_send", "linkedin_message", "call_task"],
             "human_approval_required": True,
             "dry_run": dry_run,
             "hubspot_task_payload": _hubspot_task(hubspot_account, gong_context, signal),

@@ -80,6 +80,7 @@ def _run_account(
 
 
 def _render_report(reports: list[dict[str, Any]]) -> str:
+    _normalize_render_list_fields(reports)
     template_path = TEMPLATES_DIR / "report_template.html"
     template_source = template_path.read_text(encoding="utf-8")
     try:
@@ -94,6 +95,41 @@ def _render_report(reports: list[dict[str, Any]]) -> str:
         return template.render(reports=reports)
     except ImportError:
         return _render_without_jinja(reports, template_source)
+
+
+def _normalize_render_list_fields(value: Any) -> None:
+    list_fields = {
+        "blocked_actions",
+        "key_evidence",
+        "evidence_sources",
+        "channel_scope",
+        "recommendations",
+        "recommended_actions",
+    }
+
+    if isinstance(value, list):
+        for item in value:
+            _normalize_render_list_fields(item)
+        return
+
+    if not isinstance(value, dict):
+        return
+
+    for key, child in value.items():
+        if key in list_fields:
+            value[key] = _as_text_list(child)
+        else:
+            _normalize_render_list_fields(child)
+
+
+def _as_text_list(value: Any) -> list[str]:
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [value] if value else []
+    if isinstance(value, list):
+        return [str(item) for item in value if item not in (None, "")]
+    return [str(value)]
 
 
 def _render_without_jinja(reports: list[dict[str, Any]], _template_source: str) -> str:

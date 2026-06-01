@@ -131,8 +131,18 @@ def _normalize_context(payload: dict[str, Any]) -> dict[str, Any]:
         "has_open_objection": bool(payload.get("has_open_objection")),
         "supports_outreach": bool(payload.get("supports_outreach")),
         "owner_should_handle": bool(payload.get("owner_should_handle")),
-        "key_evidence": list(payload.get("key_evidence") or []),
+        "key_evidence": _as_text_list(payload.get("key_evidence")),
         "context_summary": str(payload.get("context_summary") or ""),
         "risk_level": str(payload.get("risk_level") or "medium"),
         "evaluation_source": "openai_live",
     }
+
+
+def _as_text_list(value: Any) -> list[str]:
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [value] if value else []
+    if isinstance(value, list):
+        return [str(item) for item in value if item not in (None, "")]
+    return [str(value)]
